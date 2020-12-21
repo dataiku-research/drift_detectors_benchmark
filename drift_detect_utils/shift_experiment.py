@@ -92,7 +92,7 @@ class ShiftExperiment(object):
         self.accuracy_drop_std = np.zeros((n_sizes, 1))
         for i in range(n_sizes):
             self.accuracy_drop[i] = mean_te_accs[i] - mean_val_accs[i]
-            self.accuracy_drop_std[i] = std_val_accs[i] + std_te_accs[i]
+            self.accuracy_drop_std[i] = np.sqrt(0.5*(std_val_accs[i]**2 + std_te_accs[i]**2))
 
         sorted_indices = np.argsort(self.sizes)
         self.sizes = self.sizes[sorted_indices]
