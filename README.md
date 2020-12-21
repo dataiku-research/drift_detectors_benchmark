@@ -29,6 +29,8 @@ as three different .csv files, which will be loaded as pandas dataframe (see the
 dataset below). The test dataset will be corrupted by synthetic shifts and compared to the unperturbed validation dataset.
 The target column for the dataset must also be provided in the `target` variable.
 
+You can run the `example.py` script for a full view of the experiments on the Click_prediction_small dataset.
+ 
 ### Run drift detection on multiple types of synthetic shifts
 
 ```python
