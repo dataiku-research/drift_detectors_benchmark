@@ -22,7 +22,7 @@ keras-resnet==0.1.0
 tensorflow==1.13.1
 ```
 
-## Usage
+## Usage: Run drift detection experiments
 
 This software assumes that the dataset is provided unprocessed and separated in a three-way splits (train, validation and test) 
 as three different .csv files, which will be loaded as pandas dataframe (see the example of [Click_prediction_small](https://www.openml.org/d/1226) 
@@ -31,7 +31,7 @@ The target column for the dataset must also be provided in the `target` variable
 
 You can run the `example.py` script for a full view of the experiments on the Click_prediction_small dataset.
  
-### Run drift detection on multiple types of synthetic shifts
+### Multiple types of synthetic shifts
 
 ```python
 from drift_detect_utils.experiment_utils import rand_runs_drift_detection
@@ -80,7 +80,7 @@ for shift in shifts:
 
 ```
 
-### Run drift detection on multiple splits of unperturbed datasets (to compute a dataset-adaptive significance level)
+### Multiple splits of unperturbed datasets (dataset-adaptive significance level)
 
 ```python
 from drift_detect_utils.experiment_utils import rand_runs_drift_detection
@@ -103,7 +103,7 @@ rand_runs_drift_detection(shift, df_train_name, df_valid_name, df_test_name, tar
 
 ```
 
-### Run drift detection on multiple types of synthetic shifts, while corrupting the quality of the primary model
+### Corrupting the quality of the primary model
 
 ```python
 from drift_detect_utils.experiment_utils import rand_runs_drift_detection_quality
@@ -137,12 +137,16 @@ for shift in shifts:
 
 ### Read the Results
 
-The results are saved as several numpy files (as in failing_loudly), which can be loaded via `build_result_df` as shown below. 
-The output `results` is a pandas dataframe containing one line per shift and as many columns as the different shift detectors in the experiment. 
-Each value in the dataframe is the *efficiency score* computed for each detector and shift: a number between 0 and the number of sizes tested in `samples`.
-The highest the efficiency score, the fewest the samples needed to detect the drift. The output  `all_rf_experiments` and `no_experiment` 
-are lists of `drift_detect_utils.shift_experiment.ShiftExperiment` objects, containing all information regarding the individual experiments, 
-for instance the p-values in `ShiftExperiment.p_vals` of size [`n_sizes`, `n_detectors`, `n_runs`], or the mean accuracy drops in `ShiftExperiment.accuracy_drop`.
+The results are saved as several numpy files (as in failing_loudly), which can be loaded via `build_result_df` as shown 
+below. The output `results` is a pandas dataframe containing one line per shift and as many columns as the different shift 
+detectors in the experiment. 
+
+Each value in the dataframe is the *efficiency score* computed for each detector and shift: a number between 0 and the 
+number of sizes tested in `samples`. The higher the efficiency score, the fewer the samples needed to detect the drift. 
+
+The output  `all_rf_experiments` and `no_experiment` are lists of `drift_detect_utils.shift_experiment.ShiftExperiment` 
+objects, containing all information regarding the individual experiments, i.e. the p-values in `ShiftExperiment.p_vals` 
+of size [`n_sizes`, `n_detectors`, `n_runs`], or the mean accuracy drops in `ShiftExperiment.accuracy_drop`.
 The efficiency score can be retrieved through `ShiftExperiment.get_score_for_ranking`.
 
 ```python
