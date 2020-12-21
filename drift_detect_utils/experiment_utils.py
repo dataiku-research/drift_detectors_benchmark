@@ -133,7 +133,10 @@ def rand_runs_drift_detection_quality(shift, df_train_name, df_valid_name, df_te
 
             rand_run_p_vals[qi, :, rand_run] = ind_od_p_vals.flatten()
 
-    np.save("%s/rand_run_p_vals.npy" % (out_path), rand_run_p_vals)
+    rand_run_p_vals_filename = f'{shift_path}/rand_run_p_vals.npy'
+    accs_filename = f'{shift_path}/accs.csv'
+
+    np.save(rand_run_p_vals_filename, rand_run_p_vals)
 
     mean_val_accs = np.mean(val_accs, axis=0)
     std_val_accs = np.std(val_accs, axis=0)
@@ -150,7 +153,7 @@ def rand_runs_drift_detection_quality(shift, df_train_name, df_valid_name, df_te
     print("Mean Val accuracies: ", mean_val_accs.flatten())
     print("Mean Test accuracies: ", mean_te_accs.flatten())
 
-    np.savetxt("%s/accs.csv" % out_path, accs, delimiter=",")
+    np.savetxt(accs_filename, accs, delimiter=",")
 
 
 def rand_runs_drift_detection(shift, df_train_name, df_valid_name, df_test_name, target, max_num_row,

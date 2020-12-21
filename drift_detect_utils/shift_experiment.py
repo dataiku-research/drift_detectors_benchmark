@@ -56,15 +56,44 @@ def get_folders(path):
     return list_folders
 
 
-def get_results(path):
+def get_results(path, dcl=True):
 
-    dcl_accs = np.loadtxt("%s/dcl_accs.csv" % path, delimiter=",")
-    sizes = list(dcl_accs[0])
+    if dcl:
+        dcl_accs = np.loadtxt("%s/dcl_accs.csv" % path, delimiter=",")
+        sizes = list(dcl_accs[0])
+    else:
+        sizes = None
 
     accs = np.loadtxt("%s/accs.csv" % path, delimiter=",")
     rand_run_p_vals = np.load("%s/rand_run_p_vals.npy" % path)
 
     return sizes, accs, rand_run_p_vals
+
+
+def load_all_quality_results(in_path, qualities=None):
+
+    if qualities is None:
+        qualities = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+
+    prefixes = get_folders(in_path)
+    quality_results = pd.DataFrame(columns=['shift', 'quality', 'accuracy', 'p-value'])
+    c = 0
+    for shift in prefixes:
+        print(shift)
+        shift_path = os.path.join(in_path, shift)
+        try:
+            _, accs, rand_run_p_vals = get_results(path=shift_path, dcl=False)
+            mean_val_accs = accs[0]
+
+            for i_q, q in enumerate(qualities):
+                for i_r in range(5):
+                    quality_results.loc[c] = [shift, q, mean_val_accs[i_q], rand_run_p_vals[i_q, 0, i_r]]
+                    c += 1
+        except Exception as inst:
+            print(inst)
+            print("Can't generate results")
+            continue
+    return quality_results
 
 
 class ShiftExperiment(object):

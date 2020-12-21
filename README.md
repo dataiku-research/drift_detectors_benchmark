@@ -155,7 +155,7 @@ shifts += ['adversarial_attack_shift_zoo_1.0', 'adversarial_attack_shift_boundar
 
 qualities = [0.0, 0.1, 0.25, 0.5, 0.75, 1.0]
 sample = 1000
-n_runs = 100
+n_runs = 5
 
 for shift in shifts:
 
@@ -180,18 +180,26 @@ The efficiency score can be retrieved through `ShiftExperiment.get_score_for_ran
 from drift_detect_utils.shift_experiment import build_result_df
 
 dataset_name = 'Click_prediction_small'
-df_train_name = dataset_name + '_train.csv'
-df_valid_name = dataset_name + '_valid.csv'
-df_test_name = dataset_name + '_test.csv'
-target = 'click'
-max_num_row = 10000
-
-out_path_rf = dataset_name + '_drift_rf' # or quality path
-out_path_no = dataset_name + '_drift_no' # or empty path
+out_path_rf = dataset_name + '_drift_rf' 
+out_path_no = dataset_name + '_drift_no' 
 
 dr_techniques = ['BBSDs', 'BBSDh', 'Test_X', 'Test_PCA', 'Test_SRP', 'DC']
 results, all_rf_experiments, no_experiment = build_result_df(dataset_name, out_path_rf, out_path_no,
                                                              dr_techniques, adapt=True)
+
+```
+
+For the experiments of the Black-Box-Shift-Detector with corruption of the primary model quality, the results can be 
+loaded through `drift_detect_utils.shift_experiment.load_all_quality_results` which returns a pandas dataframe with one
+row per shift type, quality and run, containing the p-values from the Black-Box-Shift-Detector KS-test. 
+
+```python
+from drift_detect_utils.shift_experiment import load_all_quality_results
+
+dataset_name = 'Click_prediction_small'
+out_path_quality = dataset_name + '_drift_quality' 
+
+results = load_all_quality_results(out_path_quality)
 
 ```
 

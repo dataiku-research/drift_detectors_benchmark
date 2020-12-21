@@ -1,5 +1,5 @@
-from drift_detect_utils.experiment_utils import rand_runs_drift_detection
-from drift_detect_utils.shift_experiment import build_result_df
+from drift_detect_utils.experiment_utils import rand_runs_drift_detection, rand_runs_drift_detection_quality
+from drift_detect_utils.shift_experiment import build_result_df, load_all_quality_results
 from failing_loudly.shared_utils import DimensionalityReduction
 
 # Read inputs
@@ -13,6 +13,7 @@ max_num_row = 10000
 # Write outputs
 out_path_rf = dataset_name + '_drift_rf'
 out_path_no = dataset_name + '_drift_no'
+out_path_quality = dataset_name + '_drift_quality'
 
 # Define DR methods.
 dr_techniques = [DimensionalityReduction.BBSDs_RF.value, DimensionalityReduction.BBSDh_RF.value,
@@ -50,8 +51,19 @@ results, all_rf_experiments, no_experiment = build_result_df(dataset_name, out_p
 
 print(results)
 
+qualities = [0.0, 0.1, 0.25, 0.5, 0.75, 1.0]
+sample = 1000
+n_runs = 5
 
+for shift in shifts:
+    print('Running Drift Experiments on %s for %s' % (df_train_name, shift))
 
+    rand_runs_drift_detection_quality(shift, df_train_name, df_valid_name, df_test_name, target, max_num_row,
+                                      qualities, out_path_quality, sample, random_runs=n_runs, sign_level=0.05)
+
+results_quality = load_all_quality_results(out_path_quality)
+
+print(results_quality)
 
 
 
