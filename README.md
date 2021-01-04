@@ -176,4 +176,8 @@ results = load_all_quality_results(out_path_quality)
 
 ```
 
+### Benchmark disaggregated results
+
+All disaggregated results from the drift experiments in the benchmark are detailed in [disaggregated_results.md](disaggregated_results.md).
+
 ## License
