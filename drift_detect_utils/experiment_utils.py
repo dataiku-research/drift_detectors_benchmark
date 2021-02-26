@@ -19,7 +19,7 @@ def rand_runs_drift_detection_quality(shift, df_train_name, df_valid_name, df_te
     test_types = [td.value for td in TestDimensionality]
 
     # Define DR methods.
-    dr_techniques = [DimensionalityReduction.BBSDs.value]
+    dr_techniques = [DimensionalityReduction.BBSDs_RF.value]
     dr_techniques_plot = dr_techniques.copy()
 
     shift_path = os.path.join(out_path, shift)
